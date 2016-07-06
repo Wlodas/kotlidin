@@ -2,7 +2,6 @@ package pl.kotlidin
 
 import com.vaadin.data.Container
 import com.vaadin.ui.*
-import java.math.BigInteger
 
 inline fun button(caption: String, init: Button.() -> Unit) : Button {
 	val button = Button(caption)
@@ -49,7 +48,6 @@ inline fun horizontalLayout(init: HorizontalLayout.() -> Unit) : HorizontalLayou
 inline fun horizontalLayout(vararg children: Component, init: HorizontalLayout.() -> Unit) : HorizontalLayout {
 	val layout = HorizontalLayout(*children)
 	layout.init()
-	BigInteger.valueOf(1L) + BigInteger.valueOf(1L)
 	return layout
 }
 
