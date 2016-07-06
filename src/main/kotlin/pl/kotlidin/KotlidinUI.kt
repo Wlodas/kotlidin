@@ -34,7 +34,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 				refreshRows()
 			})
 			
-			addComponentWithRatio(table("Persons", persons) {
+			this += table("Persons", persons) {
 				setSizeFull()
 				addGeneratedColumn("", { table, itemId, columnId -> horizontalLayout() {
 					isSpacing = true
@@ -49,7 +49,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 					})
 				} })
 				setVisibleColumns("id", "firstName", "lastName", "")
-			}, ratio = 1F)
+			} withExpandRatio 1F
 		}
 	}
 }

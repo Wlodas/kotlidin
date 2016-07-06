@@ -55,7 +55,11 @@ inline operator fun ComponentContainer.plusAssign(component: Component) = this.a
 
 inline operator fun ComponentContainer.minusAssign(component: Component) = this.removeComponent(component)
 
-inline fun AbstractOrderedLayout.addComponentWithRatio(component: Component, ratio: Float) {
-	this.addComponent(component)
-	this.setExpandRatio(component, ratio)
+data class ComponentWithExpandRatio(val component: Component, val expandRatio: Float)
+
+inline infix fun Component.withExpandRatio(expandRatio: Float) = ComponentWithExpandRatio(this, expandRatio)
+
+inline operator fun AbstractOrderedLayout.plusAssign(wrapper: ComponentWithExpandRatio) {
+	this.addComponent(wrapper.component)
+	this.setExpandRatio(wrapper.component, wrapper.expandRatio)
 }
