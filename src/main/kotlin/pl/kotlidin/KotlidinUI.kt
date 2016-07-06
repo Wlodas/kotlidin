@@ -3,7 +3,11 @@ package pl.kotlidin
 import com.vaadin.annotations.Push
 import com.vaadin.annotations.Theme
 import com.vaadin.data.fieldgroup.BeanFieldGroup
+import com.vaadin.data.fieldgroup.FieldGroup
 import com.vaadin.data.util.BeanItemContainer
+import com.vaadin.data.validator.BeanValidator
+import com.vaadin.server.ErrorHandler
+import com.vaadin.server.ErrorMessage
 import com.vaadin.server.VaadinRequest
 import com.vaadin.spring.annotation.SpringUI
 import com.vaadin.ui.*
@@ -30,7 +34,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			isSpacing = true
 			
 			this += Button("Create person", { event ->
-				showPersonForm(Person(), {
+				showPersonForm("New person", Person(), {
 					personRepository.save(it)
 					refreshRows()
 				})
@@ -41,13 +45,13 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 				addGeneratedColumn("", { table, itemId, columnId -> horizontalLayout() {
 					isSpacing = true
 					this += Button("Edit", { event ->
-						showPersonForm(itemId as Person, {
+						showPersonForm("Edit person", itemId as Person, {
 							personRepository.save(it)
 							refreshRows()
 						})
 					})
 					this += Button("Copy", { event ->
-						showPersonForm((itemId as Person).copy(), {
+						showPersonForm("New person", (itemId as Person).copy(), {
 							personRepository.save(it)
 							refreshRows()
 						})
@@ -58,6 +62,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 					})
 				} })
 				setVisibleColumns("id", "firstName", "lastName", "")
+				setColumnHeaders("Id", "First name", "Last name", "")
 			} withExpandRatio 1F
 		}
 	}
@@ -80,16 +85,28 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		}
 	}
 	
-	private fun showPersonForm(person: Person, onSubmit: (Person) -> Unit) {
+	private fun showPersonForm(formCaption: String, person: Person, onSubmit: (Person) -> Unit) {
 		val form = PersonForm()
 		val beanFieldGroup = BeanFieldGroup.bindFieldsBuffered(person, form)
-		val window = Window("Person form")
+		val window = Window(formCaption)
 		
 		form.setMargin(true)
 		form.saveButton.addClickListener {
-			beanFieldGroup.commit();
-			window.close();
-			onSubmit(person);
+			try {
+				beanFieldGroup.commit();
+				onSubmit(person);
+				window.close();
+			} catch(e: FieldGroup.CommitException) {
+				when(e.cause) {
+					is FieldGroup.FieldGroupInvalidValueException -> {
+						form.saveButton.componentError = object : ErrorMessage {
+							override fun getErrorLevel() = ErrorMessage.ErrorLevel.WARNING
+							override fun getFormattedHtmlMessage() = "Form still contains some invalid fields"
+						}
+					}
+					else -> throw e
+				}
+			}
 		}
 		form.cancelButton.addClickListener { window.close(); }
 		
