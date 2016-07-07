@@ -77,7 +77,10 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		val cancelButton = Button("Cancel")
 		
 		init {
+			firstName.isNullSettingAllowed = true
 			firstName.nullRepresentation = ""
+			
+			lastName.isNullSettingAllowed = true
 			lastName.nullRepresentation = ""
 			
 			this += firstName
