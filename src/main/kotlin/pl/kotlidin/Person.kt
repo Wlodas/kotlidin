@@ -14,4 +14,8 @@ class Person(
 	@field:NotBlank
 	@field:Column(nullable = false)
 	var lastName: String? = null
-) : AbstractEntity<Long>()
+) : AbstractEntity<Long>() {
+	fun copy(firstName: String? = this.firstName, lastName: String? = this.lastName): Person {
+		return Person(firstName = firstName, lastName = lastName)
+	}
+}
