@@ -52,16 +52,18 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			
 			this += table("Persons", persons) {
 				setSizeFull()
-				addGeneratedColumn("", { table, itemId, columnId -> horizontalLayout() {
-					isSpacing = true
-					this += Button("Edit", { event ->
-						showPersonForm("Edit person", itemId as Person, cachedSavePersonFunction)
-					})
-					this += Button("Copy", { event ->
-						showPersonForm("New person", (itemId as Person).copy(), cachedSavePersonFunction)
-					})
-					this += Button("Delete", { event -> deletePerson(itemId as Person) })
-				} })
+				addGeneratedColumn("", { table, itemId, columnId ->
+					horizontalLayout() {
+						isSpacing = true
+						this += Button("Edit", { event ->
+							showPersonForm("Edit person", itemId as Person, cachedSavePersonFunction)
+						})
+						this += Button("Copy", { event ->
+							showPersonForm("New person", (itemId as Person).copy(), cachedSavePersonFunction)
+						})
+						this += Button("Delete", { event -> deletePerson(itemId as Person) })
+					}
+				})
 				setVisibleColumns("id", "firstName", "lastName", "")
 				setColumnHeaders("Id", "First name", "Last name", "")
 			} withExpandRatio 1F
@@ -98,7 +100,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 				onSubmit(person);
 				window.close();
 			} catch(e: FieldGroup.CommitException) {
-				when(e.cause) {
+				when (e.cause) {
 					is FieldGroup.FieldGroupInvalidValueException -> {
 						form.saveButton.componentError = object : ErrorMessage {
 							override fun getErrorLevel() = ErrorMessage.ErrorLevel.WARNING
