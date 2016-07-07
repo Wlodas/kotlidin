@@ -35,10 +35,11 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		refreshRows()
 	}
 	
-	val cachedSavePersonFunction: (Person) -> Unit = { savePerson(it) }
-	
 	override fun init(request: VaadinRequest?) {
 		refreshRows()
+		
+		// TODO: remove in Kotlin 1.1
+		val cachedSavePersonFunction: (Person) -> Unit = { savePerson(it) }
 		
 		content = verticalLayout() {
 			setSizeFull()
