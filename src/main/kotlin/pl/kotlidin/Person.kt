@@ -8,11 +8,11 @@ import javax.validation.constraints.NotNull
 @Entity
 class Person(
 	@field:NotBlank
-	@field:Column(nullable = false)
+	@Column(nullable = false)
 	var firstName: String? = null,
 	
 	@field:NotBlank
-	@field:Column(nullable = false)
+	@Column(nullable = false)
 	var lastName: String? = null
 ) : AbstractEntity<Long>() {
 	fun copy(firstName: String? = this.firstName, lastName: String? = this.lastName): Person {
