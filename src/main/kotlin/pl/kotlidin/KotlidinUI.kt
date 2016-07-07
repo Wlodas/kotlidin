@@ -2,11 +2,10 @@ package pl.kotlidin
 
 import com.vaadin.annotations.Push
 import com.vaadin.annotations.Theme
+import com.vaadin.annotations.Title
 import com.vaadin.data.fieldgroup.BeanFieldGroup
 import com.vaadin.data.fieldgroup.FieldGroup
 import com.vaadin.data.util.BeanItemContainer
-import com.vaadin.data.validator.BeanValidator
-import com.vaadin.server.ErrorHandler
 import com.vaadin.server.ErrorMessage
 import com.vaadin.server.VaadinRequest
 import com.vaadin.spring.annotation.SpringUI
@@ -16,7 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired
 
 @Push
 @Theme(ValoTheme.THEME_NAME)
-@SpringUI(path = "")
+@Title("Kotlidin Demo")
+@SpringUI
 class KotlidinUI @Autowired constructor(private val personRepository: PersonRepository) : UI() {
 	private val persons = BeanItemContainer(Person::class.java);
 	
@@ -24,6 +24,18 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		persons.removeAllItems()
 		persons.addAll(personRepository.findAll())
 	}
+	
+	private fun savePerson(person: Person) {
+		personRepository.save(person)
+		refreshRows()
+	}
+	
+	private fun deletePerson(person: Person) {
+		personRepository.delete(person)
+		refreshRows()
+	}
+	
+	val cachedSavePersonFunction: (Person) -> Unit = { savePerson(it) }
 	
 	override fun init(request: VaadinRequest?) {
 		refreshRows()
@@ -34,10 +46,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			isSpacing = true
 			
 			this += Button("Create person", { event ->
-				showPersonForm("New person", Person(), {
-					personRepository.save(it)
-					refreshRows()
-				})
+				showPersonForm("New person", Person(), cachedSavePersonFunction)
 			})
 			
 			this += table("Persons", persons) {
@@ -45,21 +54,12 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 				addGeneratedColumn("", { table, itemId, columnId -> horizontalLayout() {
 					isSpacing = true
 					this += Button("Edit", { event ->
-						showPersonForm("Edit person", itemId as Person, {
-							personRepository.save(it)
-							refreshRows()
-						})
+						showPersonForm("Edit person", itemId as Person, cachedSavePersonFunction)
 					})
 					this += Button("Copy", { event ->
-						showPersonForm("New person", (itemId as Person).copy(), {
-							personRepository.save(it)
-							refreshRows()
-						})
+						showPersonForm("New person", (itemId as Person).copy(), cachedSavePersonFunction)
 					})
-					this += Button("Delete", { event ->
-						personRepository.delete(itemId as Person)
-						refreshRows()
-					})
+					this += Button("Delete", { event -> deletePerson(itemId as Person) })
 				} })
 				setVisibleColumns("id", "firstName", "lastName", "")
 				setColumnHeaders("Id", "First name", "Last name", "")
