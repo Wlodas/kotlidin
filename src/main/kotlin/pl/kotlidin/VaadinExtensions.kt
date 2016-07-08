@@ -1,6 +1,7 @@
 package pl.kotlidin
 
 import com.vaadin.data.Container
+import com.vaadin.server.Resource
 import com.vaadin.ui.*
 
 inline fun button(caption: String, init: Button.() -> Unit) : Button {
@@ -12,6 +13,12 @@ inline fun button(caption: String, init: Button.() -> Unit) : Button {
 inline fun button(caption: String, listener: Button.ClickListener, init: Button.() -> Unit) : Button {
 	val button = Button(caption, listener)
 	button.init()
+	return button
+}
+
+inline fun button(caption: String, icon: Resource, listener: Button.ClickListener) : Button {
+	val button = Button(caption, listener)
+	button.icon = icon
 	return button
 }
 

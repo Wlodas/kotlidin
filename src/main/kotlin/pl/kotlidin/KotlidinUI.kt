@@ -7,6 +7,8 @@ import com.vaadin.data.fieldgroup.BeanFieldGroup
 import com.vaadin.data.fieldgroup.FieldGroup
 import com.vaadin.data.util.BeanItemContainer
 import com.vaadin.server.ErrorMessage
+import com.vaadin.server.FontAwesome
+import com.vaadin.server.FontIcon
 import com.vaadin.server.VaadinRequest
 import com.vaadin.spring.annotation.SpringUI
 import com.vaadin.ui.*
@@ -46,7 +48,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			setMargin(true)
 			isSpacing = true
 			
-			this += Button("Create person", { event ->
+			this += button("Create person", FontAwesome.PLUS, Button.ClickListener { event ->
 				showPersonForm("New person", Person(), cachedSavePersonFunction)
 			})
 			
@@ -55,13 +57,13 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 				addGeneratedColumn("", { table, itemId, columnId ->
 					horizontalLayout() {
 						isSpacing = true
-						this += Button("Edit", { event ->
+						this += button("Edit", FontAwesome.PENCIL, Button.ClickListener { event ->
 							showPersonForm("Edit person", itemId as Person, cachedSavePersonFunction)
 						})
-						this += Button("Copy", { event ->
+						this += button("Copy", FontAwesome.COPY, Button.ClickListener { event ->
 							showPersonForm("New person", (itemId as Person).copy(), cachedSavePersonFunction)
 						})
-						this += Button("Delete", { event -> deletePerson(itemId as Person) })
+						this += button("Delete", FontAwesome.TRASH, Button.ClickListener { event -> deletePerson(itemId as Person) })
 					}
 				})
 				setVisibleColumns("id", "firstName", "lastName", "")
@@ -73,8 +75,8 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 	private class PersonForm : FormLayout() {
 		val firstName = TextField("First name")
 		val lastName = TextField("Last name")
-		val saveButton = Button("Save")
-		val cancelButton = Button("Cancel")
+		val saveButton = Button("Save", FontAwesome.CHECK)
+		val cancelButton = Button("Cancel", FontAwesome.CLOSE)
 		
 		init {
 			firstName.isNullSettingAllowed = true
@@ -116,6 +118,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		}
 		form.cancelButton.addClickListener { window.close(); }
 		
+		window.icon = FontAwesome.CHILD
 		window.content = form
 		window.isModal = true
 		window.isResizable = false
