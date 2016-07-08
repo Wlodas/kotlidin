@@ -47,7 +47,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			setMargin(true)
 			isSpacing = true
 			
-			this += button("Create person", FontAwesome.PLUS, Button.ClickListener { event ->
+			this += button("Create person", FontAwesome.PLUS, Button.ClickListener {
 				showPersonForm("New person", Person(), cachedSavePersonFunction)
 			})
 			
@@ -56,13 +56,13 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 				addGeneratedColumn("", { table, itemId, columnId ->
 					horizontalLayout() {
 						isSpacing = true
-						this += button("Edit", FontAwesome.PENCIL, Button.ClickListener { event ->
+						this += button("Edit", FontAwesome.PENCIL, Button.ClickListener {
 							showPersonForm("Edit person", itemId as Person, cachedSavePersonFunction)
 						})
-						this += button("Copy", FontAwesome.COPY, Button.ClickListener { event ->
+						this += button("Copy", FontAwesome.COPY, Button.ClickListener {
 							showPersonForm("New person", (itemId as Person).copy(), cachedSavePersonFunction)
 						})
-						this += button("Delete", FontAwesome.TRASH, Button.ClickListener { event -> deletePerson(itemId as Person) })
+						this += button("Delete", FontAwesome.TRASH, Button.ClickListener { deletePerson(itemId as Person) })
 					}
 				})
 				setVisibleColumns("id", "firstName", "lastName", "")
