@@ -46,7 +46,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			setMargin(true)
 			isSpacing = true
 			
-			this += button("Create person", KotlidinIcon.CREATE, Button.ClickListener {
+			this += button("Create person", KotlidinIcons.CREATE, Button.ClickListener {
 				showPersonForm("New person", Person(), cachedSavePersonFunction)
 			})
 			
@@ -55,13 +55,13 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 				addGeneratedColumn("", { table, itemId, columnId ->
 					horizontalLayout() {
 						isSpacing = true
-						this += button("Edit", KotlidinIcon.EDIT, Button.ClickListener {
+						this += button("Edit", KotlidinIcons.EDIT, Button.ClickListener {
 							showPersonForm("Edit person", itemId as Person, cachedSavePersonFunction)
 						})
-						this += button("Copy", KotlidinIcon.COPY, Button.ClickListener {
+						this += button("Copy", KotlidinIcons.COPY, Button.ClickListener {
 							showPersonForm("New person", (itemId as Person).copy(), cachedSavePersonFunction)
 						})
-						this += button("Delete", KotlidinIcon.DELETE, Button.ClickListener { deletePerson(itemId as Person) })
+						this += button("Delete", KotlidinIcons.DELETE, Button.ClickListener { deletePerson(itemId as Person) })
 					}
 				})
 				setVisibleColumns("id", "firstName", "lastName", "")
@@ -73,8 +73,8 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 	private class PersonForm : FormLayout() {
 		val firstName = TextField("First name")
 		val lastName = TextField("Last name")
-		val saveButton = Button("Save", KotlidinIcon.SUBMIT)
-		val cancelButton = Button("Cancel", KotlidinIcon.CLOSE)
+		val saveButton = Button("Save", KotlidinIcons.SUBMIT)
+		val cancelButton = Button("Cancel", KotlidinIcons.CLOSE)
 		
 		init {
 			firstName.isNullSettingAllowed = true
@@ -116,7 +116,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		}
 		form.cancelButton.addClickListener { window.close(); }
 		
-		window.icon = KotlidinIcon.PERSON
+		window.icon = KotlidinIcons.PERSON
 		window.content = form
 		window.isModal = true
 		window.isResizable = false
