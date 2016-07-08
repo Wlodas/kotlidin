@@ -55,7 +55,7 @@ inline operator fun ComponentContainer.plusAssign(component: Component) = this.a
 
 inline operator fun ComponentContainer.minusAssign(component: Component) = this.removeComponent(component)
 
-data class ComponentWithExpandRatio(val component: Component, val expandRatio: Float)
+class ComponentWithExpandRatio(val component: Component, val expandRatio: Float)
 
 inline infix fun Component.withExpandRatio(expandRatio: Float) = ComponentWithExpandRatio(this, expandRatio)
 
