@@ -103,7 +103,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 				beanFieldGroup.commit();
 				onSubmit(person);
 				window.close();
-			} catch(e: FieldGroup.CommitException) {
+			} catch (e: FieldGroup.CommitException) {
 				when (e.cause) {
 					is FieldGroup.FieldGroupInvalidValueException -> {
 						form.saveButton.componentError = object : ErrorMessage {
