@@ -3,11 +3,11 @@ package pl.kotlidin
 import com.vaadin.server.FontAwesome
 
 object KotlidinIcons {
-	@JvmStatic val CLOSE = FontAwesome.CLOSE
-	@JvmStatic val COPY = FontAwesome.COPY
-	@JvmStatic val CREATE = FontAwesome.PLUS
-	@JvmStatic val DELETE = FontAwesome.TRASH
-	@JvmStatic val EDIT = FontAwesome.PENCIL
-	@JvmStatic val PERSON = FontAwesome.CHILD
-	@JvmStatic val SUBMIT = FontAwesome.CHECK
+	@JvmField val CLOSE = FontAwesome.CLOSE
+	@JvmField val COPY = FontAwesome.COPY
+	@JvmField val CREATE = FontAwesome.PLUS
+	@JvmField val DELETE = FontAwesome.TRASH
+	@JvmField val EDIT = FontAwesome.PENCIL
+	@JvmField val PERSON = FontAwesome.CHILD
+	@JvmField val SUBMIT = FontAwesome.CHECK
 }
