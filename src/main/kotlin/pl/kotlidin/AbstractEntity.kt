@@ -18,7 +18,7 @@ abstract class AbstractEntity<ID : Serializable> {
 	
 	override fun equals(other: Any?): Boolean {
 		if (other === this) return true
-		if (other !is AbstractEntity<*> || other.javaClass != this.javaClass) return false
-		return if (this.id != null) this.id == other.id else false
+		if (other !is AbstractEntity<*> || other.javaClass !== this.javaClass) return false
+		return this.id != null && this.id == other.id
 	}
 }
