@@ -8,7 +8,6 @@ import com.vaadin.data.fieldgroup.FieldGroup
 import com.vaadin.data.util.BeanItemContainer
 import com.vaadin.server.ErrorMessage
 import com.vaadin.server.FontAwesome
-import com.vaadin.server.FontIcon
 import com.vaadin.server.VaadinRequest
 import com.vaadin.spring.annotation.SpringUI
 import com.vaadin.ui.*
