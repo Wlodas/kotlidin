@@ -64,8 +64,8 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 						this += button("Delete", KotlidinIcons.DELETE, Button.ClickListener { deletePerson(itemId as Person) })
 					}
 				})
-				setVisibleColumns("id", "firstName", "lastName", "")
-				setColumnHeaders("Id", "First name", "Last name", "")
+				setVisibleColumns("id", "firstName", "lastName", "gender", "")
+				setColumnHeaders("Id", "First name", "Last name", "gender", "")
 			} withExpandRatio 1F
 		}
 	}
@@ -73,6 +73,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 	private class PersonForm : FormLayout() {
 		val firstName = TextField("First name")
 		val lastName = TextField("Last name")
+		val gender = OptionGroup("Gender", Person.Gender.ALL)
 		val saveButton = Button("Save", KotlidinIcons.SUBMIT)
 		val cancelButton = Button("Cancel", KotlidinIcons.CLOSE)
 		
@@ -85,6 +86,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			
 			this += firstName
 			this += lastName
+			this += gender
 			this += horizontalLayout(saveButton, cancelButton) {
 				isSpacing = true
 			}
