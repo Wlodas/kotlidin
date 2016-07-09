@@ -88,10 +88,13 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			lastName.isNullSettingAllowed = true
 			lastName.nullRepresentation = ""
 			
+			birthDate.dateFormat = "yyyy-MM-dd"
+			
 			this += firstName
 			this += lastName
 			this += gender
 			this += birthDate
+			
 			this += horizontalLayout(saveButton, cancelButton) {
 				isSpacing = true
 			}
