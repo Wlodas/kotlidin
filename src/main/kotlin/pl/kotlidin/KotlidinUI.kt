@@ -65,7 +65,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 					}
 				})
 				setVisibleColumns("id", "firstName", "lastName", "gender", "")
-				setColumnHeaders("Id", "First name", "Last name", "gender", "")
+				setColumnHeaders("Id", "First name", "Last name", "Gender", "")
 			} withExpandRatio 1F
 		}
 	}
