@@ -36,6 +36,8 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 	}
 	
 	override fun init(request: VaadinRequest?) {
+		session.converterFactory = KotlidinConverterFactory
+		
 		refreshRows()
 		
 		// TODO: remove in Kotlin 1.1
@@ -64,8 +66,8 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 						this += button("Delete", KotlidinIcons.DELETE, Button.ClickListener { deletePerson(itemId as Person) })
 					}
 				})
-				setVisibleColumns("id", "firstName", "lastName", "gender", "")
-				setColumnHeaders("Id", "First name", "Last name", "Gender", "")
+				setVisibleColumns("id", "firstName", "lastName", "gender", "birthDate", "")
+				setColumnHeaders("Id", "First name", "Last name", "Gender", "Birth date", "")
 			} withExpandRatio 1F
 		}
 	}
@@ -74,6 +76,8 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		val firstName = TextField("First name")
 		val lastName = TextField("Last name")
 		val gender = OptionGroup("Gender", setOfAll<Person.Gender>())
+		val birthDate = DateField("Birth date")
+		
 		val saveButton = Button("Save", KotlidinIcons.SUBMIT)
 		val cancelButton = Button("Cancel", KotlidinIcons.CLOSE)
 		
@@ -87,6 +91,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			this += firstName
 			this += lastName
 			this += gender
+			this += birthDate
 			this += horizontalLayout(saveButton, cancelButton) {
 				isSpacing = true
 			}
