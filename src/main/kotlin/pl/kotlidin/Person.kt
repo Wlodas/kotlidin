@@ -23,11 +23,7 @@ class Person(
 	var gender: Gender? = null
 ) : AbstractEntity<Long>() {
 	enum class Gender {
-		MALE, FEMALE;
-		
-		companion object {
-			@JvmField val ALL = setOfAll<Gender>()
-		}
+		MALE, FEMALE
 	}
 	
 	fun copy(firstName: String? = this.firstName, lastName: String? = this.lastName, gender: Gender? = this.gender): Person {

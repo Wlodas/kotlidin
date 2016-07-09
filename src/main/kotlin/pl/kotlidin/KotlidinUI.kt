@@ -73,7 +73,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 	private class PersonForm : FormLayout() {
 		val firstName = TextField("First name")
 		val lastName = TextField("Last name")
-		val gender = OptionGroup("Gender", Person.Gender.ALL)
+		val gender = OptionGroup("Gender", setOfAll<Person.Gender>())
 		val saveButton = Button("Save", KotlidinIcons.SUBMIT)
 		val cancelButton = Button("Cancel", KotlidinIcons.CLOSE)
 		
