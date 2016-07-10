@@ -39,4 +39,8 @@ class Person(
 	): Person {
 		return Person(firstName = firstName, lastName = lastName, gender = gender, birthDate = birthDate)
 	}
+	
+	override fun toString(): String {
+		return "Person(id = $id, firstName = $firstName, lastName = $lastName, gender = $gender, birthDate = $birthDate)"
+	}
 }

@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 @Theme(ValoTheme.THEME_NAME)
 @Title("Kotlidin Demo")
 @SpringUI
-class KotlidinUI @Autowired constructor(private val personRepository: PersonRepository) : UI() {
+class KotlidinUI @Autowired constructor(private val personRepository: PersonRepository) : UI(), Loggable {
 	private val persons = BeanItemContainer(Person::class.java);
 	
 	private fun refreshRows() {
@@ -26,18 +26,19 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 	}
 	
 	private fun savePerson(person: Person) {
+		logger.info { "Saving person: $person" }
 		personRepository.save(person)
 		refreshRows()
 	}
 	
 	private fun deletePerson(person: Person) {
+		logger.info { "Deleting person: $person" }
 		personRepository.delete(person)
 		refreshRows()
 	}
 	
 	override fun init(request: VaadinRequest?) {
 		session.converterFactory = KotlidinConverterFactory
-		
 		refreshRows()
 		
 		// TODO: remove in Kotlin 1.1
