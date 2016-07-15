@@ -1,61 +1,15 @@
 package pl.kotlidin
 
-import com.vaadin.data.Container
 import com.vaadin.server.Resource
-import com.vaadin.ui.*
+import com.vaadin.ui.AbstractOrderedLayout
+import com.vaadin.ui.Button
+import com.vaadin.ui.Component
+import com.vaadin.ui.ComponentContainer
 
-inline fun button(caption: String, init: Button.() -> Unit) : Button {
-	val button = Button(caption)
-	button.init()
+inline fun Button(caption: String, icon: Resource, listener: Button.ClickListener): Button {
+	val button = Button(caption, icon)
+	button.addClickListener(listener)
 	return button
-}
-
-inline fun button(caption: String, listener: Button.ClickListener, init: Button.() -> Unit) : Button {
-	val button = Button(caption, listener)
-	button.init()
-	return button
-}
-
-inline fun button(caption: String, icon: Resource, listener: Button.ClickListener) : Button {
-	val button = Button(caption, listener)
-	button.icon = icon
-	return button
-}
-
-inline fun table(init: Table.() -> Unit) : Table {
-	val table = Table()
-	table.init()
-	return table
-}
-
-inline fun table(caption: String, dataSource: Container, init: Table.() -> Unit) : Table {
-	val table = Table(caption, dataSource)
-	table.init()
-	return table
-}
-
-inline fun verticalLayout(init: VerticalLayout.() -> Unit) : VerticalLayout {
-	val layout = VerticalLayout()
-	layout.init()
-	return layout
-}
-
-inline fun verticalLayout(vararg children: Component, init: VerticalLayout.() -> Unit) : VerticalLayout {
-	val layout = VerticalLayout(*children)
-	layout.init()
-	return layout
-}
-
-inline fun horizontalLayout(init: HorizontalLayout.() -> Unit) : HorizontalLayout {
-	val layout = HorizontalLayout()
-	layout.init()
-	return layout
-}
-
-inline fun horizontalLayout(vararg children: Component, init: HorizontalLayout.() -> Unit) : HorizontalLayout {
-	val layout = HorizontalLayout(*children)
-	layout.init()
-	return layout
 }
 
 inline operator fun ComponentContainer.plusAssign(component: Component) = this.addComponent(component)

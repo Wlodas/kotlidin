@@ -44,27 +44,27 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		// TODO: remove in Kotlin 1.1
 		val cachedSavePersonFunction: (Person) -> Unit = { savePerson(it) }
 		
-		content = verticalLayout() {
+		content = VerticalLayout().apply {
 			setSizeFull()
 			setMargin(true)
 			isSpacing = true
 			
-			this += button("Create person", KotlidinIcons.CREATE, Button.ClickListener {
+			this += Button("Create person", KotlidinIcons.CREATE, Button.ClickListener {
 				showPersonForm("New person", Person(), cachedSavePersonFunction)
 			})
 			
-			this += table("Persons", persons) {
+			this += Table("Persons", persons).apply {
 				setSizeFull()
 				addGeneratedColumn("", { table, itemId, columnId ->
-					horizontalLayout() {
+					HorizontalLayout().apply {
 						isSpacing = true
-						this += button("Edit", KotlidinIcons.EDIT, Button.ClickListener {
+						this += Button("Edit", KotlidinIcons.EDIT, Button.ClickListener {
 							showPersonForm("Edit person", itemId as Person, cachedSavePersonFunction)
 						})
-						this += button("Copy", KotlidinIcons.COPY, Button.ClickListener {
+						this += Button("Copy", KotlidinIcons.COPY, Button.ClickListener {
 							showPersonForm("New person", (itemId as Person).copy(), cachedSavePersonFunction)
 						})
-						this += button("Delete", KotlidinIcons.DELETE, Button.ClickListener { deletePerson(itemId as Person) })
+						this += Button("Delete", KotlidinIcons.DELETE, Button.ClickListener { deletePerson(itemId as Person) })
 					}
 				})
 				setVisibleColumns("id", "firstName", "lastName", "gender", "birthDate", "")
@@ -96,7 +96,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			this += gender
 			this += birthDate
 			
-			this += horizontalLayout(saveButton, cancelButton) {
+			this += HorizontalLayout(saveButton, cancelButton).apply {
 				isSpacing = true
 			}
 		}
