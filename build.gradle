@@ -1,18 +1,21 @@
 buildscript {
 	ext {
 		springBootVersion = '1.3.6.RELEASE'
+		springLoadedVersion = '1.2.6.RELEASE'
 		kotlinVersion = '1.0.3'
 	}
 	repositories {
 		mavenCentral()
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.springframework:springloaded:${springLoadedVersion}")
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
 	}
 }
 
 apply plugin: 'kotlin'
+apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot' 
 
@@ -45,6 +48,13 @@ dependencyManagement {
 	}
 }
 
+idea {
+	module {
+		inheritOutputDirs = false
+		outputDir = file("$buildDir/kotlin-classes/main/")
+		testOutputDir = file("$buildDir/kotlin-classes/test/")
+	}
+}
 
 eclipse {
 	classpath {
