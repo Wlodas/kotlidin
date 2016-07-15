@@ -26,13 +26,13 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 	}
 	
 	private fun savePerson(person: Person) {
-		logger.info { "Saving person: $person" }
+//		logger.info { "Saving person: $person" }
 		personRepository.save(person)
 		refreshRows()
 	}
 	
 	private fun deletePerson(person: Person) {
-		logger.info { "Deleting person: $person" }
+//		logger.info { "Deleting person: $person" }
 		personRepository.delete(person)
 		refreshRows()
 	}
