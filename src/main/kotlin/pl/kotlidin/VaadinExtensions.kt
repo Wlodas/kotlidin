@@ -6,7 +6,7 @@ import com.vaadin.ui.Button
 import com.vaadin.ui.Component
 import com.vaadin.ui.ComponentContainer
 
-inline fun Button(caption: String, icon: Resource, listener: Button.ClickListener): Button {
+inline fun Button(caption: String?, icon: Resource, listener: Button.ClickListener): Button {
 	val button = Button(caption, icon)
 	button.addClickListener(listener)
 	return button
