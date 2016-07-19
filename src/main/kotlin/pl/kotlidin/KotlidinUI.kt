@@ -74,23 +74,23 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 	}
 	
 	private class PersonForm : FormLayout() {
-		val firstName = TextField("First name")
-		val lastName = TextField("Last name")
+		val firstName = TextField("First name").apply {
+			isNullSettingAllowed = true
+			nullRepresentation = ""
+		}
+		val lastName = TextField("Last name").apply {
+			isNullSettingAllowed = true
+			nullRepresentation = ""
+		}
 		val gender = OptionGroup("Gender", setOfAll<Person.Gender>())
-		val birthDate = DateField("Birth date")
+		val birthDate = DateField("Birth date").apply {
+			dateFormat = "yyyy-MM-dd"
+		}
 		
 		val saveButton = Button("Save", KotlidinIcons.SUBMIT)
 		val cancelButton = Button("Cancel", KotlidinIcons.CLOSE)
 		
 		init {
-			firstName.isNullSettingAllowed = true
-			firstName.nullRepresentation = ""
-			
-			lastName.isNullSettingAllowed = true
-			lastName.nullRepresentation = ""
-			
-			birthDate.dateFormat = "yyyy-MM-dd"
-			
 			this += firstName
 			this += lastName
 			this += gender
