@@ -87,7 +87,7 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI(), Loggabl
 	private fun showPersonForm(person: Person) {
 		val form = PersonForm()
 		val beanFieldGroup = BeanFieldGroup.bindFieldsBuffered(person, form)
-		val window = Window(if(person.id == null) "New person" else "Edit person")
+		val window = Window(if (person.id == null) "New person" else "Edit person")
 		
 		form.setMargin(true)
 		form.saveButton.addClickListener {
