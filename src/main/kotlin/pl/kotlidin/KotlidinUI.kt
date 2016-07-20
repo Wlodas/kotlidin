@@ -46,16 +46,16 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			setMargin(true)
 			isSpacing = true
 			
-			this += Button("Create person", KotlidinIcons.CREATE, Button.ClickListener { showPersonForm(Person()) })
+			this += Button("Create person", KotlidinIcons.CREATE) { showPersonForm(Person()) }
 			
 			this += Table("Persons", persons).apply {
 				setSizeFull()
 				addGeneratedColumn("", { table, itemId, columnId ->
 					HorizontalLayout().apply {
 						isSpacing = true
-						this += Button("Edit", KotlidinIcons.EDIT, Button.ClickListener { showPersonForm(itemId as Person) })
-						this += Button("Copy", KotlidinIcons.COPY, Button.ClickListener { showPersonForm((itemId as Person).copy()) })
-						this += Button("Delete", KotlidinIcons.DELETE, Button.ClickListener { deletePerson(itemId as Person) })
+						this += Button("Edit", KotlidinIcons.EDIT) { showPersonForm(itemId as Person) }
+						this += Button("Copy", KotlidinIcons.COPY) { showPersonForm((itemId as Person).copy()) }
+						this += Button("Delete", KotlidinIcons.DELETE) { deletePerson(itemId as Person) }
 					}
 				})
 				setVisibleColumns("id", "firstName", "lastName", "gender", "birthDate", "")
