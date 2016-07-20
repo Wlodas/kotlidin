@@ -17,7 +17,7 @@ import com.vaadin.ui.themes.ValoTheme
 @Title("Kotlidin Demo")
 @SpringUI
 class KotlidinUI(private val personRepository: PersonRepository) : UI(), Loggable {
-	private val persons = BeanItemContainer(Person::class.java);
+	private val persons = BeanItemContainer(Person::class.java)
 	
 	private fun refreshRows() {
 		persons.removeAllItems()
@@ -100,9 +100,9 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI(), Loggabl
 		form.setMargin(true)
 		form.saveButton.addClickListener {
 			try {
-				beanFieldGroup.commit();
-				savePerson(person);
-				window.close();
+				beanFieldGroup.commit()
+				savePerson(person)
+				window.close()
 			} catch (e: FieldGroup.CommitException) {
 				when (e.cause) {
 					is FieldGroup.FieldGroupInvalidValueException -> {
@@ -115,7 +115,7 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI(), Loggabl
 				}
 			}
 		}
-		form.cancelButton.addClickListener { window.close(); }
+		form.cancelButton.addClickListener { window.close() }
 		
 		window.icon = KotlidinIcons.PERSON
 		window.content = form
