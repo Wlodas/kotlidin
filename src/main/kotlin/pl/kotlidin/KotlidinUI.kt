@@ -11,13 +11,12 @@ import com.vaadin.server.VaadinRequest
 import com.vaadin.spring.annotation.SpringUI
 import com.vaadin.ui.*
 import com.vaadin.ui.themes.ValoTheme
-import org.springframework.beans.factory.annotation.Autowired
 
 @Push
 @Theme(ValoTheme.THEME_NAME)
 @Title("Kotlidin Demo")
 @SpringUI
-class KotlidinUI @Autowired constructor(private val personRepository: PersonRepository) : UI(), Loggable {
+class KotlidinUI(private val personRepository: PersonRepository) : UI(), Loggable {
 	private val persons = BeanItemContainer(Person::class.java);
 	
 	private fun refreshRows() {
