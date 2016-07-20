@@ -64,18 +64,10 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI(), Loggabl
 	}
 	
 	private class PersonForm : FormLayout() {
-		val firstName = TextField("First name").apply {
-			isNullSettingAllowed = true
-			nullRepresentation = ""
-		}
-		val lastName = TextField("Last name").apply {
-			isNullSettingAllowed = true
-			nullRepresentation = ""
-		}
+		val firstName = TextField("First name").apply { isNullSettingAllowed = true; nullRepresentation = "" }
+		val lastName = TextField("Last name").apply { isNullSettingAllowed = true; nullRepresentation = "" }
 		val gender = OptionGroup("Gender", setOfAll<Person.Gender>())
-		val birthDate = DateField("Birth date").apply {
-			dateFormat = "yyyy-MM-dd"
-		}
+		val birthDate = DateField("Birth date").apply { dateFormat = "yyyy-MM-dd" }
 		
 		val saveButton = Button("Save", KotlidinIcons.SUBMIT)
 		val cancelButton = Button("Cancel", KotlidinIcons.CLOSE)
