@@ -41,16 +41,13 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		session.converterFactory = KotlidinConverterFactory
 		refreshRows()
 		
-		// TODO: remove in Kotlin 1.1
-		val cachedSavePersonFunction: (Person) -> Unit = { savePerson(it) }
-		
 		content = VerticalLayout().apply {
 			setSizeFull()
 			setMargin(true)
 			isSpacing = true
 			
 			this += Button("Create person", KotlidinIcons.CREATE, Button.ClickListener {
-				showPersonForm("New person", Person(), cachedSavePersonFunction)
+				showPersonForm("New person", Person())
 			})
 			
 			this += Table("Persons", persons).apply {
@@ -59,10 +56,10 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 					HorizontalLayout().apply {
 						isSpacing = true
 						this += Button("Edit", KotlidinIcons.EDIT, Button.ClickListener {
-							showPersonForm("Edit person", itemId as Person, cachedSavePersonFunction)
+							showPersonForm("Edit person", itemId as Person)
 						})
 						this += Button("Copy", KotlidinIcons.COPY, Button.ClickListener {
-							showPersonForm("New person", (itemId as Person).copy(), cachedSavePersonFunction)
+							showPersonForm("New person", (itemId as Person).copy())
 						})
 						this += Button("Delete", KotlidinIcons.DELETE, Button.ClickListener { deletePerson(itemId as Person) })
 					}
@@ -102,7 +99,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		}
 	}
 	
-	private fun showPersonForm(formCaption: String, person: Person, onSubmit: (Person) -> Unit) {
+	private fun showPersonForm(formCaption: String, person: Person) {
 		val form = PersonForm()
 		val beanFieldGroup = BeanFieldGroup.bindFieldsBuffered(person, form)
 		val window = Window(formCaption)
@@ -111,7 +108,7 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		form.saveButton.addClickListener {
 			try {
 				beanFieldGroup.commit();
-				onSubmit(person);
+				savePerson(person);
 				window.close();
 			} catch (e: FieldGroup.CommitException) {
 				when (e.cause) {
