@@ -46,21 +46,15 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 			setMargin(true)
 			isSpacing = true
 			
-			this += Button("Create person", KotlidinIcons.CREATE, Button.ClickListener {
-				showPersonForm("New person", Person())
-			})
+			this += Button("Create person", KotlidinIcons.CREATE, Button.ClickListener { showPersonForm(Person()) })
 			
 			this += Table("Persons", persons).apply {
 				setSizeFull()
 				addGeneratedColumn("", { table, itemId, columnId ->
 					HorizontalLayout().apply {
 						isSpacing = true
-						this += Button("Edit", KotlidinIcons.EDIT, Button.ClickListener {
-							showPersonForm("Edit person", itemId as Person)
-						})
-						this += Button("Copy", KotlidinIcons.COPY, Button.ClickListener {
-							showPersonForm("New person", (itemId as Person).copy())
-						})
+						this += Button("Edit", KotlidinIcons.EDIT, Button.ClickListener { showPersonForm(itemId as Person) })
+						this += Button("Copy", KotlidinIcons.COPY, Button.ClickListener { showPersonForm((itemId as Person).copy()) })
 						this += Button("Delete", KotlidinIcons.DELETE, Button.ClickListener { deletePerson(itemId as Person) })
 					}
 				})
@@ -99,10 +93,10 @@ class KotlidinUI @Autowired constructor(private val personRepository: PersonRepo
 		}
 	}
 	
-	private fun showPersonForm(formCaption: String, person: Person) {
+	private fun showPersonForm(person: Person) {
 		val form = PersonForm()
 		val beanFieldGroup = BeanFieldGroup.bindFieldsBuffered(person, form)
-		val window = Window(formCaption)
+		val window = Window(if(person.id == null) "New person" else "Edit person")
 		
 		form.setMargin(true)
 		form.saveButton.addClickListener {
