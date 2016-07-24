@@ -5,7 +5,6 @@ import com.vaadin.annotations.Theme
 import com.vaadin.annotations.Title
 import com.vaadin.data.fieldgroup.BeanFieldGroup
 import com.vaadin.data.fieldgroup.FieldGroup
-import com.vaadin.data.util.BeanItemContainer
 import com.vaadin.server.ErrorMessage
 import com.vaadin.server.VaadinRequest
 import com.vaadin.spring.annotation.SpringUI
@@ -17,7 +16,7 @@ import com.vaadin.ui.themes.ValoTheme
 @Title("Kotlidin Demo")
 @SpringUI
 class KotlidinUI(private val personRepository: PersonRepository) : UI(), Loggable {
-	private val persons = BeanItemContainer(Person::class.java)
+	private val persons = BeanItemContainer<Person>()
 	
 	private fun refreshRows() {
 		persons.removeAllItems()

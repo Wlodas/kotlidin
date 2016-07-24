@@ -1,5 +1,6 @@
 package pl.kotlidin
 
+import com.vaadin.data.util.BeanItemContainer
 import com.vaadin.server.Resource
 import com.vaadin.ui.AbstractOrderedLayout
 import com.vaadin.ui.Button
@@ -24,3 +25,5 @@ inline operator fun AbstractOrderedLayout.plusAssign(wrapper: ComponentWithExpan
 	this.addComponent(wrapper.component)
 	this.setExpandRatio(wrapper.component, wrapper.expandRatio)
 }
+
+inline fun <reified T : Any> BeanItemContainer(): BeanItemContainer<T> = BeanItemContainer(T::class.java)
