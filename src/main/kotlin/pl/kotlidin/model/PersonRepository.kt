@@ -1,4 +1,4 @@
-package pl.kotlidin
+package pl.kotlidin.model
 
 import org.springframework.data.jpa.repository.JpaRepository
 

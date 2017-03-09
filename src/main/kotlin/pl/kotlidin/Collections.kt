@@ -20,6 +20,6 @@ fun <E : Enum<E>> Array<out E>.toSet(): Set<E> {
 	return when (size) {
 		0 -> emptySet()
 		1 -> kotlin.collections.setOf(this[0])
-		else -> toCollection(EnumSet.noneOf(this[0].javaClass))
+		else -> toCollection(EnumSet.noneOf(this[0].declaringClass))
 	}
 }

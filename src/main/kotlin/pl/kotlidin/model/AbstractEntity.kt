@@ -1,4 +1,4 @@
-package pl.kotlidin
+package pl.kotlidin.model
 
 import java.io.Serializable
 import javax.persistence.GeneratedValue

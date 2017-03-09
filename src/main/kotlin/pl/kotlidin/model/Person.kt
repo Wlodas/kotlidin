@@ -1,4 +1,4 @@
-package pl.kotlidin
+package pl.kotlidin.model
 
 import org.hibernate.validator.constraints.NotBlank
 import java.time.LocalDate
@@ -10,10 +10,12 @@ import javax.validation.constraints.NotNull
 
 @Entity
 class Person(
+	@field:NotNull
 	@field:NotBlank
 	@Column(nullable = false)
 	var firstName: String? = null,
 	
+	@field:NotNull
 	@field:NotBlank
 	@Column(nullable = false)
 	var lastName: String? = null,

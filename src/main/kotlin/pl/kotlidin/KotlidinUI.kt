@@ -3,70 +3,79 @@ package pl.kotlidin
 import com.vaadin.annotations.Push
 import com.vaadin.annotations.Theme
 import com.vaadin.annotations.Title
-import com.vaadin.data.fieldgroup.BeanFieldGroup
-import com.vaadin.data.fieldgroup.FieldGroup
+import com.vaadin.data.BeanValidationBinder
 import com.vaadin.server.ErrorMessage
 import com.vaadin.server.VaadinRequest
 import com.vaadin.spring.annotation.SpringUI
 import com.vaadin.ui.*
 import com.vaadin.ui.themes.ValoTheme
+import org.springframework.data.domain.PageRequest
+import pl.kotlidin.model.Person
+import pl.kotlidin.model.PersonRepository
+
 
 @Push
 @Theme(ValoTheme.THEME_NAME)
 @Title("Kotlidin Demo")
 @SpringUI
-class KotlidinUI(private val personRepository: PersonRepository) : UI(), Loggable {
-	private val persons = BeanItemContainer<Person>()
-	
-	private fun refreshRows() {
-		persons.removeAllItems()
-		persons.addAll(personRepository.findAll())
-	}
+class KotlidinUI(private val personRepository: PersonRepository) : UI() {
+	private lateinit var grid: Grid<Person>
 	
 	private fun savePerson(person: Person) {
-//		logger.info { "Saving person: $person" }
 		personRepository.save(person)
-		refreshRows()
+		grid.dataCommunicator.reset()
 	}
 	
 	private fun deletePerson(person: Person) {
-//		logger.info { "Deleting person: $person" }
 		personRepository.delete(person)
-		refreshRows()
+		grid.dataCommunicator.reset()
 	}
 	
 	override fun init(request: VaadinRequest?) {
-		session.converterFactory = KotlidinConverterFactory
-		refreshRows()
-		
 		content = VerticalLayout().apply {
 			setSizeFull()
-			setMargin(true)
-			isSpacing = true
 			
-			this += Button("Create person", KotlidinIcons.CREATE) { showPersonForm(Person()) }
+			this += button("Create person", KotlidinIcons.CREATE) { showPersonForm(Person()) }
 			
-			this += Table("Persons", persons).apply {
+			grid = Grid<Person>("Persons").apply {
 				setSizeFull()
-				addGeneratedColumn("", { table, itemId, columnId ->
-					HorizontalLayout().apply {
-						isSpacing = true
-						this += Button("Edit", KotlidinIcons.EDIT) { showPersonForm(itemId as Person) }
-						this += Button("Copy", KotlidinIcons.COPY) { showPersonForm((itemId as Person).copy()) }
-						this += Button("Delete", KotlidinIcons.DELETE) { deletePerson(itemId as Person) }
+				setDataProvider(
+					{ /* TODO */ sortOrder, offset, limit -> personRepository.findAll(PageRequest(offset / limit, limit)).content.stream() },
+					{ personRepository.count().toInt() }
+				)
+				
+				addColumn(Person::firstName::get).caption = "First Name"
+				addColumn(Person::lastName::get).caption = "Last Name"
+				addColumn(Person::gender::get).caption = "Gender"
+				addColumn(Person::birthDate::get).caption = "Birth Date"
+				
+				setDetailsGenerator { person -> Panel().apply {
+					styleName = ValoTheme.PANEL_BORDERLESS
+					content = HorizontalLayout().apply {
+						setMargin(true)
+						this += button("Edit", KotlidinIcons.EDIT) { showPersonForm(person) }
+						this += button("Copy", KotlidinIcons.COPY) { showPersonForm(person.copy()) }
+						this += button("Delete", KotlidinIcons.DELETE) { deletePerson(person) }
 					}
-				})
-				setVisibleColumns("id", "firstName", "lastName", "gender", "birthDate", "")
-				setColumnHeaders("Id", "First name", "Last name", "Gender", "Birth date", "")
-			} withExpandRatio 1F
+				} }
+				asSingleSelect().addValueChangeListener { event ->
+					grid.setDetailsVisible(event.oldValue, false)
+					grid.setDetailsVisible(event.value, true)
+				}
+				
+//				addColumn({ "Edit" }, ButtonRenderer { event -> showPersonForm(event.item) }).isSortable = false
+//				addColumn({ "Copy" }, ButtonRenderer { event -> showPersonForm(event.item.copy()) }).isSortable = false
+//				addColumn({ "Delete" }, ButtonRenderer { event -> deletePerson(event.item) }).isSortable = false
+			}
+			this.addComponentsAndExpand(grid)
 		}
 	}
 	
 	private class PersonForm : FormLayout() {
-		val firstName = TextField("First name").apply { isNullSettingAllowed = true; nullRepresentation = "" }
-		val lastName = TextField("Last name").apply { isNullSettingAllowed = true; nullRepresentation = "" }
-		val gender = OptionGroup("Gender", setOfAll<Person.Gender>())
-		val birthDate = DateField("Birth date").apply { dateFormat = "yyyy-MM-dd" }
+		val firstName = TextField("First Name")
+		val lastName = TextField("Last Name")
+		val gender = RadioButtonGroup("Gender", setOfAll<Person.Gender>())
+		val birthDate = DateField("Birth Date").apply { dateFormat = "yyyy-MM-dd" }
 		
 		val saveButton = Button("Save", KotlidinIcons.SUBMIT)
 		val cancelButton = Button("Cancel", KotlidinIcons.CLOSE)
@@ -77,32 +86,32 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI(), Loggabl
 			this += gender
 			this += birthDate
 			
-			this += HorizontalLayout(saveButton, cancelButton).apply {
-				isSpacing = true
-			}
+			this += HorizontalLayout(saveButton, cancelButton)
 		}
 	}
 	
 	private fun showPersonForm(person: Person) {
 		val form = PersonForm()
-		val beanFieldGroup = BeanFieldGroup.bindFieldsBuffered(person, form)
+		val binder = BeanValidationBinder(Person::class.java).apply {
+			bindInstanceFields(form)
+//			bind(form.firstName, Person::firstName.name)
+//			bind(form.lastName, Person::lastName.name)
+//			bind(form.gender, Person::gender.name)
+//			bind(form.birthDate, Person::birthDate.name)
+			readBean(person)
+		}
 		val window = Window(if (person.id == null) "New person" else "Edit person")
 		
 		form.setMargin(true)
 		form.saveButton.addClickListener {
-			try {
-				beanFieldGroup.commit()
+			if (binder.validate().isOk) {
+				binder.writeBean(person)
 				savePerson(person)
 				window.close()
-			} catch (e: FieldGroup.CommitException) {
-				when (e.cause) {
-					is FieldGroup.FieldGroupInvalidValueException -> {
-						form.saveButton.componentError = object : ErrorMessage {
-							override fun getErrorLevel() = ErrorMessage.ErrorLevel.WARNING
-							override fun getFormattedHtmlMessage() = "Form still contains some invalid fields"
-						}
-					}
-					else -> throw e
+			} else {
+				form.saveButton.componentError = object : ErrorMessage {
+					override fun getErrorLevel() = ErrorMessage.ErrorLevel.WARNING
+					override fun getFormattedHtmlMessage() = "Form still contains some invalid fields"
 				}
 			}
 		}
