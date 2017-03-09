@@ -91,7 +91,9 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI() {
 	}
 	
 	private fun showPersonForm(person: Person) {
-		val form = PersonForm()
+		val form = PersonForm().apply {
+			setMargin(true)
+		}
 		val binder = BeanValidationBinder(Person::class.java).apply {
 			bindInstanceFields(form)
 //			bind(form.firstName, Person::firstName.name)
@@ -100,9 +102,14 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI() {
 //			bind(form.birthDate, Person::birthDate.name)
 			readBean(person)
 		}
-		val window = Window(if (person.id == null) "New person" else "Edit person")
+		val window = Window(if (person.id == null) "New person" else "Edit person").apply {
+			icon = KotlidinIcons.PERSON
+			content = form
+			isModal = true
+			isResizable = false
+			center()
+		}
 		
-		form.setMargin(true)
 		form.saveButton.addClickListener {
 			if (binder.validate().isOk) {
 				binder.writeBean(person)
@@ -117,11 +124,6 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI() {
 		}
 		form.cancelButton.addClickListener { window.close() }
 		
-		window.icon = KotlidinIcons.PERSON
-		window.content = form
-		window.isModal = true
-		window.isResizable = false
-		window.center()
 		addWindow(window)
 	}
 }
