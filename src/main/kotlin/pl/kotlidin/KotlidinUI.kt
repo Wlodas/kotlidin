@@ -18,7 +18,7 @@ import pl.kotlidin.model.PersonRepository
 @Theme(ValoTheme.THEME_NAME)
 @Title("Kotlidin Demo")
 @SpringUI
-class KotlidinUI(private val personRepository: PersonRepository) : UI() {
+class KotlidinUI(@JvmField protected final val personRepository: PersonRepository) : UI() {
 	private lateinit var grid: Grid<Person>
 	
 	private fun savePerson(person: Person) {
