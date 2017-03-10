@@ -33,8 +33,6 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI() {
 	
 	override fun init(request: VaadinRequest?) {
 		content = VerticalLayout().apply {
-			setSizeFull()
-			
 			this += button("Create person", KotlidinIcons.CREATE) { showPersonForm(Person()) }
 			
 			grid = Grid<Person>("Persons").apply {
