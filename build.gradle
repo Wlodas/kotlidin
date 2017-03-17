@@ -2,7 +2,7 @@ buildscript {
 	ext {
 		springBootVersion = '1.5.2.RELEASE'
 		springLoadedVersion = '1.2.6.RELEASE'
-		kotlinVersion = '1.1.0'
+		kotlinVersion = '1.1.1'
 	}
 	repositories {
 		mavenCentral()
@@ -49,7 +49,7 @@ dependencies {
 
 dependencyManagement {
 	imports {
-		mavenBom "com.vaadin:vaadin-bom:8.0.2"
+		mavenBom "com.vaadin:vaadin-bom:8.0.3"
 	}
 }
 
