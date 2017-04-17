@@ -42,10 +42,10 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI() {
 					{ personRepository.count().toInt() }
 				)
 				
-				addColumn(Person::firstName::get).caption = "First Name"
-				addColumn(Person::lastName::get).caption = "Last Name"
-				addColumn(Person::gender::get).caption = "Gender"
-				addColumn(Person::birthDate::get).caption = "Birth Date"
+				addColumn(Person::firstName).caption = "First Name"
+				addColumn(Person::lastName).caption = "Last Name"
+				addColumn(Person::gender).caption = "Gender"
+				addColumn(Person::birthDate).caption = "Birth Date"
 				
 				setDetailsGenerator { person -> Panel().apply {
 					styleName = ValoTheme.PANEL_BORDERLESS
@@ -109,15 +109,19 @@ class KotlidinUI(private val personRepository: PersonRepository) : UI() {
 		}
 		
 		form.saveButton.addClickListener {
-			if (binder.validate().isOk) {
-				binder.writeBean(person)
-				savePerson(person)
-				window.close()
-			} else {
-				form.saveButton.componentError = object : ErrorMessage {
-					override fun getErrorLevel() = ErrorMessage.ErrorLevel.WARNING
-					override fun getFormattedHtmlMessage() = "Form still contains some invalid fields"
+			if (person.id == null || binder.hasChanges()) {
+				if (binder.validate().isOk) {
+					binder.writeBean(person)
+					savePerson(person)
+					window.close()
+				} else {
+					form.saveButton.componentError = object : ErrorMessage {
+						override fun getErrorLevel() = ErrorMessage.ErrorLevel.WARNING
+						override fun getFormattedHtmlMessage() = "Form still contains some invalid fields"
+					}
 				}
+			} else {
+				window.close()
 			}
 		}
 		form.cancelButton.addClickListener { window.close() }
